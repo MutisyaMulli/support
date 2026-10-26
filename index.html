@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADO HTML Commit Previewer — Support</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --bg: #f4f2ef;
+    --card: #ffffff;
+    --ink: #241b2e;
+    --muted: #6b6476;
+    --line: #e7e2de;
+    --accent: #f58220;
+    --accent-ink: #241b2e;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1622;
+      --card: #251d2d;
+      --ink: #f2eef5;
+      --muted: #a79cb0;
+      --line: #392e42;
+      --accent: #f6923d;
+      --accent-ink: #1c1622;
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    padding: 48px 16px;
+    display: flex;
+    justify-content: center;
+  }
+  main {
+    width: 100%;
+    max-width: 560px;
+  }
+  .mark {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .mark svg { flex: none; }
+  .mark .name {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(28px, 6vw, 34px);
+    line-height: 1.15;
+    margin: 0 0 10px;
+  }
+  .lede {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 46ch;
+    margin: 0 0 32px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 18px;
+  }
+  .card h2 {
+    font-size: 13px;
+    font-family: "IBM Plex Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .email-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  a.email-text {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 16px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink);
+    text-decoration: none;
+    word-break: break-all;
+  }
+  a.email-text:hover { border-color: var(--accent); }
+  .card p { margin: 0 0 10px; font-size: 14.5px; line-height: 1.6; color: var(--ink); }
+  .card p:last-child { margin-bottom: 0; }
+  ul.checklist {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+  ul.checklist li {
+    padding-left: 22px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  ul.checklist li::before {
+    content: "\2192";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  a.link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+  footer {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="mark">
+    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="9" fill="#241b2e"/>
+      <ellipse cx="18" cy="18" rx="10" ry="5.5" fill="#f58220"/>
+      <circle cx="18" cy="18" r="5" fill="#241b2e"/>
+    </svg>
+    <span class="name">ADO HTML Commit Previewer</span>
+  </div>
+
+  <h1>Support</h1>
+  <p class="lede">
+    A Chrome extension that renders HTML files changed in an Azure DevOps commit or pull
+    request with real repo images and a consistent stylesheet, since Azure DevOps' own preview
+    has neither.
+  </p>
+
+  <div class="card">
+    <h2>Contact</h2>
+    <div class="email-row">
+      <a class="email-text" href="mailto:anthony.mutisya@advantive.com">anthony.mutisya@advantive.com</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Reporting an issue</h2>
+    <p>Email the above with:</p>
+    <ul class="checklist">
+      <li>The Azure DevOps commit or PR URL you were previewing</li>
+      <li>Which browser and version</li>
+      <li>The error text shown on the orange button, if it turned red (hover it first — the
+        message is in the tooltip)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Privacy</h2>
+    <p>
+      This extension only ever talks to <code>dev.azure.com</code>, using your existing browser
+      session. No separate login, no token, no data collected or sent anywhere else.
+    </p>
+    <p><a class="link" href="https://gist.github.com/MutisyaMulli/e12b7117670ac2b36ccf42c9b5ee35bd" target="_blank" rel="noopener">Read the full privacy policy</a></p>
+  </div>
+
+  <footer>Internal Advantive tool &middot; not affiliated with Microsoft or Azure DevOps.</footer>
+</main>
+</body>
+</html>
