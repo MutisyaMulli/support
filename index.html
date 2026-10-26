@@ -129,6 +129,17 @@
     text-decoration: none;
     border-bottom: 1px solid currentColor;
   }
+  a.btn {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    text-decoration: none;
+  }
+  a.btn:hover { filter: brightness(0.95); }
   footer {
     font-size: 13px;
     color: var(--muted);
@@ -155,21 +166,29 @@
   </p>
 
   <div class="card">
-    <h2>Contact</h2>
+    <h2>Other questions</h2>
+    <p>Not a bug report — just a question? Reach out directly:</p>
     <div class="email-row">
       <a class="email-text" href="mailto:anthony.mutisya@advantive.com">anthony.mutisya@advantive.com</a>
     </div>
   </div>
 
   <div class="card">
-    <h2>Reporting an issue</h2>
-    <p>Email the above with:</p>
+    <h2>Report an issue</h2>
+    <p>Issues are tracked publicly on GitHub, not by email. Click below to open a pre-filled
+      report — just fill in the blanks.</p>
     <ul class="checklist">
       <li>The Azure DevOps commit or PR URL you were previewing</li>
       <li>Which browser and version</li>
       <li>The error text shown on the orange button, if it turned red (hover it first — the
         message is in the tooltip)</li>
     </ul>
+    <p style="margin-top: 16px;">
+      <a class="btn" href="https://github.com/MutisyaMulli/support/issues/new?title=Bug%20report&amp;body=**Azure%20DevOps%20commit%2FPR%20URL%3A**%0A%0A%0A**Browser%20and%20version%3A**%0A%0A%0A**What%20happened%3A**%0A%0A%0A**Error%20message%20shown%20on%20the%20button%20(hover%20it%20for%20the%20tooltip)%2C%20if%20any%3A**%0A%0A" target="_blank" rel="noopener">Open an issue on GitHub &rarr;</a>
+    </p>
+    <p style="margin-top: 10px;">
+      <a class="link" href="https://github.com/MutisyaMulli/support/issues" target="_blank" rel="noopener">See existing issues</a>
+    </p>
   </div>
 
   <div class="card">
