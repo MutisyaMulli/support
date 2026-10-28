@@ -1,0 +1,34 @@
+name: Notify owner
+
+# Posts comments as the github-actions bot so GitHub emails the owner. No secrets, no Claude here.
+# The "Fix this" link points at 127.0.0.1 and only works on the owner's PC.
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  issues: write
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ACTION: ${{ github.event.action }}
+          LABEL: ${{ github.event.label.name }}
+          NUMBER: ${{ github.event.issue.number }}
+          OWNER: ${{ github.repository_owner }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [ "$ACTION" = "opened" ]; then
+            BODY="@$OWNER new report. [Fix this](http://127.0.0.1:8787/run?issue=$NUMBER) (works on your PC while the listener is running)."
+          elif [ "$LABEL" = "fix-ready" ]; then
+            BODY="@$OWNER the fix for #$NUMBER is ready. Review branch \`fix/issue-$NUMBER\` in ADO, then publish the new package."
+          elif [ "$LABEL" = "fix-failed" ]; then
+            BODY="@$OWNER the automatic fix for #$NUMBER failed and needs manual attention. See ~/.ado-preview-watcher.log on your PC."
+          else
+            exit 0
+          fi
+          gh issue comment "$NUMBER" --repo "$REPO" --body "$BODY"
