@@ -1,10 +1,11 @@
-name: Notify owner
+name: Notify runner
 
-# Posts comments as the github-actions bot so GitHub emails the owner. No secrets, no Claude here.
-# The links point at 127.0.0.1 and only work on the owner's PC.
+# Posts comments as the github-actions bot so GitHub emails whoever ran the step. No secrets, no Claude here.
+# Each listener adds labels from its own PC, so the label's author (the sender) is the person to mention.
+# The links point at 127.0.0.1 and only work on that person's PC.
 on:
   issues:
-    types: [opened, labeled]
+    types: [labeled]
 
 permissions:
   issues: write
@@ -16,23 +17,29 @@ jobs:
       - name: Comment
         env:
           GH_TOKEN: ${{ github.token }}
-          ACTION: ${{ github.event.action }}
           LABEL: ${{ github.event.label.name }}
           NUMBER: ${{ github.event.issue.number }}
-          OWNER: ${{ github.repository_owner }}
+          WHO: ${{ github.event.sender.login }}
           REPO: ${{ github.repository }}
         run: |
-          if [ "$ACTION" = "opened" ]; then
-            BODY="@$OWNER new report. [Fix this](http://127.0.0.1:8787/run?issue=$NUMBER) (works on your PC while the listener is running)."
-          elif [ "$LABEL" = "fix-ready" ]; then
-            BODY="@$OWNER the fix for #$NUMBER is ready. Review branch \`fix/issue-$NUMBER\` in ADO, then [Upload draft](http://127.0.0.1:8787/upload?issue=$NUMBER) to the Chrome Web Store."
-          elif [ "$LABEL" = "fix-failed" ]; then
-            BODY="@$OWNER the automatic fix for #$NUMBER failed or made no change and needs your attention. See ~/.ado-preview-watcher.log on your PC."
-          elif [ "$LABEL" = "draft-uploaded" ]; then
-            BODY="@$OWNER the draft for #$NUMBER is uploaded. Review and publish it in the [Web Store dashboard](https://chrome.google.com/webstore/devconsole), and submit the zip to Firefox AMO."
-          elif [ "$LABEL" = "upload-failed" ]; then
-            BODY="@$OWNER the draft upload for #$NUMBER failed. See ~/.ado-preview-watcher.log on your PC."
-          else
-            exit 0
-          fi
+          case "$LABEL" in
+            triage-actionable)
+              BODY="@$WHO triage thinks #$NUMBER is an actionable report (see the triage comment above). [Fix this](http://127.0.0.1:8787/run?issue=$NUMBER) if you agree." ;;
+            triage-skip)
+              BODY="@$WHO triage did not mark #$NUMBER as actionable (see the triage comment above). Nothing was started. If you disagree, [Fix this](http://127.0.0.1:8787/run?issue=$NUMBER) anyway." ;;
+            fix-ready)
+              BODY="@$WHO the fix for #$NUMBER passed review and the Aikido scan, and its ADO pull request is set to auto-complete into main. Once it has merged, [Upload draft](http://127.0.0.1:8787/upload?issue=$NUMBER) to add it to the Chrome Web Store as a new version." ;;
+            review-blocked)
+              BODY="@$WHO the independent review or Aikido scan blocked the fix for #$NUMBER (see the review comment above). Nothing was merged. Branch \`fix/issue-$NUMBER\` is in ADO if you want to look." ;;
+            merge-failed)
+              BODY="@$WHO the fix for #$NUMBER passed review but its pull request could not be opened (see the comment above). Branch \`fix/issue-$NUMBER\` is in ADO." ;;
+            fix-failed)
+              BODY="@$WHO the automatic fix for #$NUMBER failed or made no change and needs your attention. See ~/.ado-preview-watcher.log on your PC." ;;
+            draft-uploaded)
+              BODY="@$WHO the draft for #$NUMBER is uploaded as a new version. Review and publish it in the [Web Store dashboard](https://chrome.google.com/webstore/devconsole), and submit the zip to Firefox AMO." ;;
+            upload-failed)
+              BODY="@$WHO the draft upload for #$NUMBER failed. See ~/.ado-preview-watcher.log on your PC." ;;
+            *)
+              exit 0 ;;
+          esac
           gh issue comment "$NUMBER" --repo "$REPO" --body "$BODY"
