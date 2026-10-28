@@ -1,7 +1,7 @@
 name: Notify owner
 
 # Posts comments as the github-actions bot so GitHub emails the owner. No secrets, no Claude here.
-# The "Fix this" link points at 127.0.0.1 and only works on the owner's PC.
+# The links point at 127.0.0.1 and only work on the owner's PC.
 on:
   issues:
     types: [opened, labeled]
@@ -25,9 +25,13 @@ jobs:
           if [ "$ACTION" = "opened" ]; then
             BODY="@$OWNER new report. [Fix this](http://127.0.0.1:8787/run?issue=$NUMBER) (works on your PC while the listener is running)."
           elif [ "$LABEL" = "fix-ready" ]; then
-            BODY="@$OWNER the fix for #$NUMBER is ready. Review branch \`fix/issue-$NUMBER\` in ADO, then publish the new package."
+            BODY="@$OWNER the fix for #$NUMBER is ready. Review branch \`fix/issue-$NUMBER\` in ADO, then [Upload draft](http://127.0.0.1:8787/upload?issue=$NUMBER) to the Chrome Web Store."
           elif [ "$LABEL" = "fix-failed" ]; then
-            BODY="@$OWNER the automatic fix for #$NUMBER failed and needs manual attention. See ~/.ado-preview-watcher.log on your PC."
+            BODY="@$OWNER the automatic fix for #$NUMBER failed or made no change and needs your attention. See ~/.ado-preview-watcher.log on your PC."
+          elif [ "$LABEL" = "draft-uploaded" ]; then
+            BODY="@$OWNER the draft for #$NUMBER is uploaded. Review and publish it in the [Web Store dashboard](https://chrome.google.com/webstore/devconsole), and submit the zip to Firefox AMO."
+          elif [ "$LABEL" = "upload-failed" ]; then
+            BODY="@$OWNER the draft upload for #$NUMBER failed. See ~/.ado-preview-watcher.log on your PC."
           else
             exit 0
           fi
